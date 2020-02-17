@@ -134,7 +134,7 @@ class TranslatorSettings(object):
         return exec_path
 
     @staticmethod
-    def get_license_settings(self):
+    def get_license_settings():
         """
         Get all the license settings needed by the translator executable in order to be executed
 
