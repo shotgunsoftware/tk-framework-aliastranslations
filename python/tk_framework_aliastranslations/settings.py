@@ -14,7 +14,11 @@ logger = sgtk.platform.get_logger(__name__)
 
 
 class TranslatorSettings(object):
+    """
+    Class object to store all the settings needed by the translation process
+    """
 
+    # list of executables we have to use in order to run translations according to the translated file type
     _EXEC_NAME_LIST = {
             "wref": "AlToRef.exe",
             "igs": "AliasToIges.exe",
@@ -23,6 +27,8 @@ class TranslatorSettings(object):
             "stp": "AliasToStep.exe"
         }
 
+    # list of extra parameters we need to use in order to run translation correctly according to the type of file
+    # we want to have
     _EXTRA_PARAMS_LIST = {
             "jt": [
                 "-e1s",
@@ -47,6 +53,10 @@ class TranslatorSettings(object):
 
     def __init__(self, translation_type=None):
         """
+        Class constructor.
+
+        :param translation_type: Type of the translation we want to run. It should correspond to the extension of the
+                                 file we want to get
         """
 
         self.translation_type = translation_type
@@ -57,17 +67,24 @@ class TranslatorSettings(object):
     @property
     def exec_name(self):
         """
+        Name of the executable we have to use to run the translation
         """
         return self._exec_name
 
     @property
     def extra_params(self):
         """
+        List of extra parameters which will be used by the translation process
         """
         return self._extra_params
 
     def get_translator_path(self):
         """
+        Get the path to the translator according to Alias installation folder.
+        If we run the translation directly inside Alias, it installation path will be used to find the translator.
+        Otherwise, use the Shotgun software entity to try to determine a valid Alias install.
+
+        :returns: The path to the translator living in the Alias installation folder
         """
 
         if self._exec_path:
@@ -116,9 +133,12 @@ class TranslatorSettings(object):
 
         return exec_path
 
+    @staticmethod
     def get_license_settings(self):
         """
-        :return:
+        Get all the license settings needed by the translator executable in order to be executed
+
+        :return: A list containing all the license information
         """
 
         current_engine = sgtk.platform.current_engine()

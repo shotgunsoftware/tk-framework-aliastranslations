@@ -17,9 +17,18 @@ logger = sgtk.platform.get_logger(__name__)
 
 
 class Translator(object):
+    """
+    Python wrapper to run the Alias file translations inside and outside of Alias.
+
+    .. note:: Because of license issue, only the WREF translation can be run outside of Alias.
+    """
 
     def __init__(self, source_path, output_path):
         """
+        Class constructor.
+
+        :param source_path: Path to the file we want to translate
+        :param output_path: Path to the translated file
         """
 
         self.source_path = source_path
@@ -31,11 +40,16 @@ class Translator(object):
     @property
     def translator_path(self):
         """
+        Path to the executable used to translate the source file
         """
         return self.translator_settings.get_translator_path()
 
     def add_extra_param(self, param_name, param_value):
         """
+        Add an extra parameter to the translator command line
+
+        :param param_name:  Name of the parameter
+        :param param_value: Value of the parameter
         """
 
         self.translator_settings._extra_params.append("{-name}".format(name=param_name))
@@ -43,6 +57,9 @@ class Translator(object):
 
     def is_valid(self):
         """
+        Check if it's possible or not to run the translation according to the current environment
+
+        :returns: False if it's not possible to run the translation, True otherwise.
         """
 
         current_engine = sgtk.platform.current_engine()
@@ -57,6 +74,7 @@ class Translator(object):
 
     def execute(self):
         """
+        Run the translation command in a subprocess and wait for command to complete.
         """
 
         current_engine = sgtk.platform.current_engine()
@@ -94,7 +112,9 @@ class Translator(object):
 
     def _get_translation_type_from_output_path(self):
         """
-        :return:
+        Get the translation type according to the translated file extension
+
+        :return: The translation type as a string
         """
 
         _, ext = os.path.splitext(self.output_path)
