@@ -64,7 +64,7 @@ class Translator(object):
 
         current_engine = sgtk.platform.current_engine()
 
-        if current_engine.name != "tk-alias" and self.translation_type == "wref":
+        if current_engine.name != "tk-alias" and self.translation_type != "wref":
             logger.warning(
                 "Couldn't run translation of %s outside of Alias because of license issue" % self.translation_type
             )
