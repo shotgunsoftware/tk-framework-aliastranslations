@@ -52,7 +52,7 @@ class Translator(object):
         :param param_value: Value of the parameter
         """
 
-        self.translator_settings._extra_params.append("{-name}".format(name=param_name))
+        self.translator_settings._extra_params.append("-{name}".format(name=param_name))
         self.translator_settings._extra_params.append("{value}".format(name=param_value))
 
     def is_valid(self):
