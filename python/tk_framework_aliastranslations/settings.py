@@ -81,7 +81,7 @@ class TranslatorSettings(object):
     def get_translator_path(self):
         """
         Get the path to the translator according to Alias installation folder.
-        If we run the translation directly inside Alias, it installation path will be used to find the translator.
+        If we run the translation directly inside Alias, its installation path will be used to find the translator.
         Otherwise, use the Shotgun software entity to try to determine a valid Alias install.
 
         :returns: The path to the translator living in the Alias installation folder

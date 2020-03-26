@@ -94,7 +94,7 @@ class Translator(object):
         # be sure the destination folder is created
         current_engine.ensure_folder_exists(os.path.dirname(self.output_path))
 
-        # build the commande line which will be used to do the translation
+        # build the command line which will be used to do the translation
         cmd = [self.translator_path]
         if current_engine.name == "tk-alias":
             cmd.extend(self.translator_settings.get_license_settings())
