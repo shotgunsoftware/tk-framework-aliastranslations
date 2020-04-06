@@ -5,8 +5,8 @@ The Alias Translations Framework contains a collection of helpers and tools to m
 files to different formats.
 
 .. warning::
-    This framework is a wrapper of Alias command lines this is why you must have Alias installed on the computer
-    you try to run the code from.
+    This framework is a wrapper of Alias command line tools. This requires that you have Alias installed on the computer
+    executing this code.
 
 .. note::
     For now, you can only convert files to these formats:
