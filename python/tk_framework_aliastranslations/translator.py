@@ -53,7 +53,9 @@ class Translator(object):
         """
 
         self.translator_settings._extra_params.append("-{name}".format(name=param_name))
-        self.translator_settings._extra_params.append("{value}".format(name=param_value))
+        self.translator_settings._extra_params.append(
+            "{value}".format(name=param_value)
+        )
 
     def is_valid(self):
         """
@@ -66,7 +68,8 @@ class Translator(object):
 
         if current_engine.name != "tk-alias" and self.translation_type != "wref":
             logger.warning(
-                "Couldn't run translation of %s outside of Alias because of license issue" % self.translation_type
+                "Couldn't run translation of %s outside of Alias because of license issue"
+                % self.translation_type
             )
             return False
 

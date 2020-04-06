@@ -20,36 +20,36 @@ class TranslatorSettings(object):
 
     # list of executables we have to use in order to run translations according to the translated file type
     _EXEC_NAME_LIST = {
-            "wref": "AlToRef.exe",
-            "igs": "AliasToIges.exe",
-            "catpart": "AlToC5.exe",
-            "jt": "AlToJt.bat",
-            "stp": "AliasToStep.exe"
-        }
+        "wref": "AlToRef.exe",
+        "igs": "AliasToIges.exe",
+        "catpart": "AlToC5.exe",
+        "jt": "AlToJt.bat",
+        "stp": "AliasToStep.exe",
+    }
 
     # list of extra parameters we need to use in order to run translation correctly according to the type of file
     # we want to have
     _EXTRA_PARAMS_LIST = {
-            "jt": [
-                "-e1s",
-                "-g",
-                "-xk",
-                "-s",
-                "1.0000",
-                "-u",
-                "128",
-                "-m0",
-                "-ta",
-                "-t",
-                "0.100000",
-                "-t1t",
-                "0.250000",
-                "-t2t",
-                "1.000000",
-                "-tl",
-                "1"
-            ]
-        }
+        "jt": [
+            "-e1s",
+            "-g",
+            "-xk",
+            "-s",
+            "1.0000",
+            "-u",
+            "128",
+            "-m0",
+            "-ta",
+            "-t",
+            "0.100000",
+            "-t1t",
+            "0.250000",
+            "-t2t",
+            "1.000000",
+            "-tl",
+            "1",
+        ]
+    }
 
     def __init__(self, translation_type=None):
         """
@@ -60,9 +60,17 @@ class TranslatorSettings(object):
         """
 
         self.translation_type = translation_type
-        self._exec_name = self._EXEC_NAME_LIST.get(self.translation_type) if self.translation_type else None
+        self._exec_name = (
+            self._EXEC_NAME_LIST.get(self.translation_type)
+            if self.translation_type
+            else None
+        )
         self._exec_path = None
-        self._extra_params = self._EXTRA_PARAMS_LIST.get(self.translation_type) if self.translation_type else None
+        self._extra_params = (
+            self._EXTRA_PARAMS_LIST.get(self.translation_type)
+            if self.translation_type
+            else None
+        )
 
     @property
     def exec_name(self):
@@ -104,9 +112,7 @@ class TranslatorSettings(object):
         else:
             logger.debug("Running translation outside of Alias...")
             software_launcher = sgtk.platform.create_engine_launcher(
-                current_engine.sgtk,
-                current_engine.context,
-                "tk-alias"
+                current_engine.sgtk, current_engine.context, "tk-alias"
             )
             software_versions = software_launcher.scan_software()
             for s in software_versions:
@@ -156,7 +162,7 @@ class TranslatorSettings(object):
             "-productLicenseType",
             alias_info.get("product_license_type"),
             "-productLicensePath",
-            alias_info.get("product_license_path")
+            alias_info.get("product_license_path"),
         ]
 
         return license_settings
