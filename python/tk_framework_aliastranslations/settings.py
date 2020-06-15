@@ -10,6 +10,8 @@
 import os
 import sgtk
 
+import alias_api
+
 logger = sgtk.platform.get_logger(__name__)
 
 
@@ -152,7 +154,7 @@ class TranslatorSettings(object):
         if current_engine.name != "tk-alias":
             raise ValueError("Can't get license settings outside of Alias")
 
-        alias_info = current_engine.operations.get_info()
+        alias_info = alias_api.get_product_information()
 
         license_settings = [
             "-productKey",
