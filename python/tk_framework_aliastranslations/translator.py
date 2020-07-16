@@ -53,9 +53,10 @@ class Translator(object):
         """
 
         self.translator_settings._extra_params.append("-{name}".format(name=param_name))
-        self.translator_settings._extra_params.append(
-            "{value}".format(name=param_value)
-        )
+        if param_value:
+            self.translator_settings._extra_params.append(
+                "{value}".format(value=param_value)
+            )
 
     def is_valid(self):
         """
