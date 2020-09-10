@@ -10,7 +10,7 @@
 import os
 import sgtk
 
-import alias_api
+import alias_api #noqa
 
 logger = sgtk.platform.get_logger(__name__)
 
