@@ -69,9 +69,9 @@ class TranslatorSettings(object):
         )
         self._exec_path = None
         self._extra_params = (
-            self._EXTRA_PARAMS_LIST.get(self.translation_type)
+            self._EXTRA_PARAMS_LIST.get(self.translation_type, [])
             if self.translation_type
-            else None
+            else []
         )
 
     @property
