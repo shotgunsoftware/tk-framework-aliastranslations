@@ -10,8 +10,6 @@
 import os
 import sgtk
 
-import alias_api  # noqa
-
 logger = sgtk.platform.get_logger(__name__)
 
 
@@ -148,6 +146,8 @@ class TranslatorSettings(object):
 
         :return: A list containing all the license information
         """
+
+        import alias_api
 
         current_engine = sgtk.platform.current_engine()
 
