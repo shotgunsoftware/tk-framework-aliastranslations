@@ -22,7 +22,7 @@ class TranslatorSettings(object):
     _EXEC_NAME_LIST = {
         "wref": "AlToRef.exe",
         "igs": "AliasToIges.exe",
-        "catpart": "AlToC5.exe",
+        "catpart": "AliasToCatia5.exe",
         "jt": "AlToJt.bat",
         "stp": "AliasToStep.exe",
     }
