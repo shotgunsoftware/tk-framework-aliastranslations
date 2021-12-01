@@ -5,8 +5,8 @@
 This repository is a part of the ShotGrid Pipeline Toolkit.
 
 - For more information about this app and for release notes, *see the wiki section*.
-- For general information and documentation, click here: https://support.shotgunsoftware.com/entries/95441257
-- For information about ShotGrid in general, click here: https://help.autodesk.com/view/SGSUB/ENU
+- For general information and documentation, click here: https://developer.shotgridsoftware.com/d587be80/?title=Integrations+User+Guide
+- For information about ShotGrid in general, click here: https://developer.shotgridsoftware.com/162eaa4b/?title=Pipeline+Integration+Components
 
 ## Have a Question?
-Don't hesitate to contact us! You can find us on support@shotgunsoftware.com
+Don't hesitate to contact us! You can find us on https://knowledge.autodesk.com/contact-support
