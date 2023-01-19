@@ -67,7 +67,11 @@ class Translator(object):
 
         current_engine = sgtk.platform.current_engine()
 
-        if current_engine.name != "tk-alias" and self.translation_type != "wref":
+        if (
+            current_engine.name != "tk-alias"
+            and self.translation_type != "wref"
+            and not self.translator_settings.license_settings
+        ):
             logger.warning(
                 "Couldn't run translation of %s outside of Alias because of license issue"
                 % self.translation_type
@@ -100,8 +104,20 @@ class Translator(object):
 
         # build the command line which will be used to do the translation
         cmd = [self.translator_path]
-        if current_engine.name == "tk-alias":
-            cmd.extend(self.translator_settings.get_license_settings())
+
+        # get the license settings
+        cmd.append("-productKey")
+        cmd.append(self.translator_settings.license_settings.get("product_key", ""))
+        cmd.append("-productVersion")
+        cmd.append(self.translator_settings.license_settings.get("product_version", ""))
+        cmd.append("-productLicenseType")
+        cmd.append(
+            self.translator_settings.license_settings.get("product_license_type", "")
+        )
+        cmd.append("-productLicensePath")
+        cmd.append(
+            self.translator_settings.license_settings.get("product_license_path", "")
+        )
 
         cmd.append("-i")
         cmd.append(self.source_path)
