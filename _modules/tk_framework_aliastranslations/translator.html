@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>tk_framework_aliastranslations.translator &mdash; tk-framework-aliastranslations v0.2.2 documentation</title>
+  <title>tk_framework_aliastranslations.translator &mdash; tk-framework-aliastranslations v0.2.3 documentation</title>
   
 
   
@@ -116,16 +116,22 @@
                              text-decoration: underline; }
     </style>
 
-    <b>tk-framework-aliastranslations</b> v0.2.2.<br>
+    <b>tk-framework-aliastranslations</b> v0.2.3.<br>
     
-        This documentation is part of the Shotgun Pipeline Toolkit.
+        This documentation is part of the ShotGrid Pipeline Toolkit.
     
     For more information, please visit
-    <a class=custom_post_menu href='https://developer.shotgridsoftware.com'>Shotgun Support</a>.
+    <a class=custom_post_menu href='https://developer.shotgridsoftware.com'>The ShotGrid developer portal.</a>.
     The code associated with this documentation can be found
     <a class=custom_post_menu href='https://github.com/shotgunsoftware/tk-framework-aliastranslations'>here</a>.
 
     </div>
+    <style>
+        p.privacy_links { margin: 4px 0px;}
+    </style>
+    <p class="privacy_links"><a data-opt-in-preferences href="javascript:;">Privacy settings</a></p>
+    <p class="privacy_links"><a data-wat-linkname="manage-ccpa-settings-footer-link" href="javascript:;">Do not sell my personal information</a></p>
+    <p class="privacy_links"><a href="https://www.autodesk.com/company/legal-notices-trademarks/privacy-statement">Privacy/Cookies</a></p>
 
 
 
@@ -207,14 +213,14 @@
 
 
 <div class="viewcode-block" id="Translator"><a class="viewcode-back" href="../../translator.html#tk_framework_aliastranslations.Translator">[docs]</a><span class="k">class</span> <span class="nc">Translator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Python wrapper to run the Alias file translations inside and outside of Alias.</span>
 
 <span class="sd">    .. note:: Because of license issue, only the WREF translation can be run outside of Alias.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Class constructor.</span>
 
 <span class="sd">        :param source_path: Path to the file we want to translate</span>
@@ -229,13 +235,13 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">translator_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Path to the executable used to translate the source file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">translator_settings</span><span class="o">.</span><span class="n">get_translator_path</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Translator.add_extra_param"><a class="viewcode-back" href="../../translator.html#tk_framework_aliastranslations.Translator.add_extra_param">[docs]</a>    <span class="k">def</span> <span class="nf">add_extra_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add an extra parameter to the translator command line</span>
 
 <span class="sd">        :param param_name:  Name of the parameter</span>
@@ -249,7 +255,7 @@
             <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Translator.is_valid"><a class="viewcode-back" href="../../translator.html#tk_framework_aliastranslations.Translator.is_valid">[docs]</a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check if it&#39;s possible or not to run the translation according to the current environment</span>
 
 <span class="sd">        :returns: False if it&#39;s not possible to run the translation, True otherwise.</span>
@@ -257,7 +263,11 @@
 
         <span class="n">current_engine</span> <span class="o">=</span> <span class="n">sgtk</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">current_engine</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">current_engine</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;tk-alias&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation_type</span> <span class="o">!=</span> <span class="s2">&quot;wref&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">current_engine</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;tk-alias&quot;</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation_type</span> <span class="o">!=</span> <span class="s2">&quot;wref&quot;</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">translator_settings</span><span class="o">.</span><span class="n">license_settings</span>
+        <span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                 <span class="s2">&quot;Couldn&#39;t run translation of </span><span class="si">%s</span><span class="s2"> outside of Alias because of license issue&quot;</span>
                 <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation_type</span>
@@ -267,7 +277,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Translator.execute"><a class="viewcode-back" href="../../translator.html#tk_framework_aliastranslations.Translator.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run the translation command in a subprocess and wait for command to complete.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -290,8 +300,20 @@
 
         <span class="c1"># build the command line which will be used to do the translation</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">translator_path</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">current_engine</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;tk-alias&quot;</span><span class="p">:</span>
-            <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translator_settings</span><span class="o">.</span><span class="n">get_license_settings</span><span class="p">())</span>
+
+        <span class="c1"># get the license settings</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-productKey&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translator_settings</span><span class="o">.</span><span class="n">license_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;product_key&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-productVersion&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translator_settings</span><span class="o">.</span><span class="n">license_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;product_version&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-productLicenseType&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">translator_settings</span><span class="o">.</span><span class="n">license_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;product_license_type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-productLicensePath&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">translator_settings</span><span class="o">.</span><span class="n">license_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;product_license_path&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-i&quot;</span><span class="p">)</span>
         <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_path</span><span class="p">)</span>
@@ -305,7 +327,7 @@
         <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_get_translation_type_from_output_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the translation type according to the translated file extension</span>
 
 <span class="sd">        :return: The translation type as a string</span>
@@ -325,7 +347,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2022, Autodesk
+        &copy; Copyright 2023, Autodesk
 
     </p>
   </div> 
@@ -353,15 +375,14 @@
   
  
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-2114792-1', 'auto');
-  ga('send', 'pageview');
-</script>
-
+  <script type="text/javascript">
+    window.wafCCPAForceShow = true;
+    (function(a,b,c,d){
+      a='https://tags.tiqcdn.com/utag/autodesk/micro-basic/prod/utag.js';
+      b=document;c='script';d=b.createElement(c);d.src=a;d.type='text/java'+c;d.async=true;
+      a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
+    })();
+  </script>
 
 
 </body>
