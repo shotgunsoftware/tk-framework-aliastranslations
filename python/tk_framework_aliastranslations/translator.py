@@ -81,11 +81,7 @@ class Translator(object):
         return True
 
     def execute(self):
-        """
-        Run the translation command in a subprocess and wait for command to complete.
-        """
-
-        current_engine = sgtk.platform.current_engine()
+        """Run the translation command in a subprocess and wait for command to complete."""
 
         if not self.translator_path:
             raise ValueError("Couldn't translate file: missing translator path")
@@ -100,6 +96,7 @@ class Translator(object):
             raise ValueError("Couldn't translate file: it doesn't exist on disk.")
 
         # be sure the destination folder is created
+        current_engine = sgtk.platform.current_engine()
         current_engine.ensure_folder_exists(os.path.dirname(self.output_path))
 
         # build the command line which will be used to do the translation
