@@ -16,13 +16,29 @@ logger = sgtk.platform.get_logger(__name__)
 class TranslatorSettings(object):
     """Class object to store all the settings needed by the translation process."""
 
-    # list of executables we have to use in order to run translations according to the translated file type
+    # Alias translator executable file names. A default is provided for each type of file, and
+    # will be used unless an environment variable is specified to override it. The environment
+    # variables to override are defined as the keys of the dictionary (other than "default").
+    # For example, if a user has the environment variable 'ALIAS_CATIA5_EXPORT_ATF' set, then
+    # the AliasToCatia5.exe translator will be used
     _EXEC_NAME_LIST = {
-        "wref": "AlToRef.exe",
-        "igs": "AliasToIges.exe",
-        "catpart": "AlToC5.exe",
-        "jt": "AlToJt.bat",
-        "stp": "AliasToStep.exe",
+        "wref": {
+            "default": "AlToRef.exe",
+        },
+        "igs": {
+            "default": "AliasToIges.exe",
+        },
+        "catpart": {
+            "default": "AlToC5.exe",
+            "ALIAS_CATIA5_EXPORT_ATF": "AliasToCatia5.exe",
+        },
+        "jt": {
+            "default": "AlToJt.bat",
+            "ALIAS_JT_EXPORT_ATF": "AliasToJt.exe",
+        },
+        "stp": {
+            "default": "AliasToStep.exe",
+        }
     }
 
     # list of extra parameters we need to use in order to run translation correctly according to the type of file
@@ -59,11 +75,21 @@ class TranslatorSettings(object):
         """
 
         self.translation_type = translation_type
-        self._exec_name = (
+        exec_options = (
             self._EXEC_NAME_LIST.get(self.translation_type)
             if self.translation_type
-            else None
+            else {}
         )
+        self._exec_name = None
+        for option_name, option_value in exec_options.items():
+            if option_name == "default":
+                continue
+            if option_name in os.environ:
+                self._exec_name = option_value
+                break
+        if self._exec_name is None:
+            self._exec_name = exec_options.get("default")
+
         self._exec_path = None
         self._extra_params = (
             self._EXTRA_PARAMS_LIST.get(self.translation_type, [])
