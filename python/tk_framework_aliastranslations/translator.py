@@ -142,6 +142,7 @@ class Translator(object):
                 cmd.extend(self.translator_settings.extra_params)
 
             # run the translation
+            logger.info("Running translation command: {}").format(" ".join(cmd))
             subprocess.check_call(cmd, stderr=subprocess.STDOUT, shell=False)
 
             # copy the translated file from the temp location to the desired destination
