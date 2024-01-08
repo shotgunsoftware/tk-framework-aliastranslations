@@ -141,7 +141,9 @@ class Translator(object):
             if self.translator_settings.extra_params:
                 cmd.extend(self.translator_settings.extra_params)
 
-            # run the translation
+            # run the translation. note that command arguments are not quoted using shlex.quote
+            # because the Alias translators do not support quoted arguments and can handle
+            # spaces in the file paths
             logger.info("Running translation command: {}").format(" ".join(cmd))
             subprocess.check_call(cmd, stderr=subprocess.STDOUT, shell=False)
 
