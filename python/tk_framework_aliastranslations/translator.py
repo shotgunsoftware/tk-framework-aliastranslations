@@ -117,14 +117,20 @@ class Translator(object):
             cmd.append("-productKey")
             cmd.append(self.translator_settings.license_settings.get("product_key", ""))
             cmd.append("-productVersion")
-            cmd.append(self.translator_settings.license_settings.get("product_version", ""))
+            cmd.append(
+                self.translator_settings.license_settings.get("product_version", "")
+            )
             cmd.append("-productLicenseType")
             cmd.append(
-                self.translator_settings.license_settings.get("product_license_type", "")
+                self.translator_settings.license_settings.get(
+                    "product_license_type", ""
+                )
             )
             cmd.append("-productLicensePath")
             cmd.append(
-                self.translator_settings.license_settings.get("product_license_path", "")
+                self.translator_settings.license_settings.get(
+                    "product_license_path", ""
+                )
             )
 
             cmd.append("-i")
