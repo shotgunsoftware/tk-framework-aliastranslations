@@ -38,7 +38,7 @@ class TranslatorSettings(object):
         },
         "stp": {
             "default": "AliasToStep.exe",
-        }
+        },
     }
 
     # list of extra parameters we need to use in order to run translation correctly according to the type of file
