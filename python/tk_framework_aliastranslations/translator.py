@@ -135,8 +135,8 @@ class Translator(object):
             if self.translator_settings.extra_params:
                 cmd.extend(self.translator_settings.extra_params)
 
-            # finally run the translation
-            subprocess.check_call(cmd, stderr=subprocess.STDOUT, shell=True)
+            # run the translation
+            subprocess.check_call(cmd, stderr=subprocess.STDOUT, shell=False)
 
             # copy the translated file from the temp location to the desired destination
             # before exiting this scope, else the temp directory and file will be deleted
