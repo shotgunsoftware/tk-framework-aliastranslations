@@ -9,8 +9,11 @@
 # not expressly granted therein are reserved by Autodesk.
 
 import os
-import sgtk
+import shutil
 import subprocess
+import tempfile
+
+import sgtk
 
 from .settings import TranslatorSettings
 
@@ -100,33 +103,44 @@ class Translator(object):
         current_engine = sgtk.platform.current_engine()
         current_engine.ensure_folder_exists(os.path.dirname(self.output_path))
 
-        # build the command line which will be used to do the translation
-        cmd = [self.translator_path]
+        # create a temporary output path that is local to ensure the translator can perform
+        # all necessary file I/O operations. the temp file will be copied to the desired
+        # destination once the translation is complete
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # the temporary output path for the translation
+            temp_path = os.path.join(temp_dir, os.path.basename(self.output_path))
 
-        # get the license settings
-        cmd.append("-productKey")
-        cmd.append(self.translator_settings.license_settings.get("product_key", ""))
-        cmd.append("-productVersion")
-        cmd.append(self.translator_settings.license_settings.get("product_version", ""))
-        cmd.append("-productLicenseType")
-        cmd.append(
-            self.translator_settings.license_settings.get("product_license_type", "")
-        )
-        cmd.append("-productLicensePath")
-        cmd.append(
-            self.translator_settings.license_settings.get("product_license_path", "")
-        )
+            # build the command line which will be used to do the translation
+            cmd = [self.translator_path]
 
-        cmd.append("-i")
-        cmd.append(self.source_path)
-        cmd.append("-o")
-        cmd.append(self.output_path)
+            # get the license settings
+            cmd.append("-productKey")
+            cmd.append(self.translator_settings.license_settings.get("product_key", ""))
+            cmd.append("-productVersion")
+            cmd.append(self.translator_settings.license_settings.get("product_version", ""))
+            cmd.append("-productLicenseType")
+            cmd.append(
+                self.translator_settings.license_settings.get("product_license_type", "")
+            )
+            cmd.append("-productLicensePath")
+            cmd.append(
+                self.translator_settings.license_settings.get("product_license_path", "")
+            )
 
-        if self.translator_settings.extra_params:
-            cmd.extend(self.translator_settings.extra_params)
+            cmd.append("-i")
+            cmd.append(self.source_path)
+            cmd.append("-o")
+            cmd.append(temp_path)
 
-        # finally run the translation
-        subprocess.check_call(cmd, stderr=subprocess.STDOUT, shell=True)
+            if self.translator_settings.extra_params:
+                cmd.extend(self.translator_settings.extra_params)
+
+            # finally run the translation
+            subprocess.check_call(cmd, stderr=subprocess.STDOUT, shell=True)
+
+            # copy the translated file from the temp location to the desired destination
+            # before exiting this scope, else the temp directory and file will be deleted
+            shutil.copyfile(temp_path, self.output_path)
 
     def _get_translation_type_from_output_path(self):
         """
