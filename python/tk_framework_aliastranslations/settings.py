@@ -14,9 +14,7 @@ logger = sgtk.platform.get_logger(__name__)
 
 
 class TranslatorSettings(object):
-    """
-    Class object to store all the settings needed by the translation process
-    """
+    """Class object to store all the settings needed by the translation process."""
 
     # list of executables we have to use in order to run translations according to the translated file type
     _EXEC_NAME_LIST = {
@@ -55,8 +53,9 @@ class TranslatorSettings(object):
         """
         Class constructor.
 
-        :param translation_type: Type of the translation we want to run. It should correspond to the extension of the
-                                 file we want to get
+        :param translation_type: Type of the translation we want to run. It should correspond
+                                 to the extension of the file we want to get.
+        :type translation_type: str
         """
 
         self.translation_type = translation_type
@@ -76,15 +75,12 @@ class TranslatorSettings(object):
     @property
     def exec_name(self):
         """
-        Name of the executable we have to use to run the translation
-        """
+        Name of the executable we have to use to run the translation"""
         return self._exec_name
 
     @property
     def extra_params(self):
-        """
-        List of extra parameters which will be used by the translation process
-        """
+        """Get the list of extra parameters which will be used by the translation process."""
         return self._extra_params
 
     def get_translator_path(self):
