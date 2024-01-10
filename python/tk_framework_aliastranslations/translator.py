@@ -144,7 +144,7 @@ class Translator(object):
             # run the translation. note that command arguments are not quoted using shlex.quote
             # because the Alias translators do not support quoted arguments and can handle
             # spaces in the file paths
-            logger.info("Running translation command: {}").format(" ".join(cmd))
+            logger.info("Running translation command: {}".format(" ".join(cmd)))
             subprocess.check_call(cmd, stderr=subprocess.STDOUT, shell=False)
 
             # copy the translated file from the temp location to the desired destination
