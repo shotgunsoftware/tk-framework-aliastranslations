@@ -91,7 +91,7 @@ class TranslatorSettings(object):
         """
         Get the path to the translator according to Alias installation folder.
         If we run the translation directly inside Alias, its installation path will be used to find the translator.
-        Otherwise, use the ShotGrid software entity to try to determine a valid Alias install.
+        Otherwise, use the Flow Production Tracking software entity to try to determine a valid Alias install.
 
         :returns: The path to the translator living in the Alias installation folder
         """
