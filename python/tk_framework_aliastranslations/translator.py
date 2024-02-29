@@ -39,13 +39,14 @@ class Translator(object):
         self.output_path = output_path
 
         self.translation_type = self._get_translation_type_from_output_path()
-        self.translator_settings = TranslatorSettings(self.translation_type)
+        input_type = self.__get_file_extension(source_path)
+        output_type = self.__get_file_extension(output_path)
+        # self.translator_settings = TranslatorSettings(self.translation_type)
+        self.translator_settings = TranslatorSettings(self.translation_type, input_type=input_type, output_type=output_type)
 
     @property
     def translator_path(self):
-        """
-        Path to the executable used to translate the source file
-        """
+        """Path to the executable used to translate the source file."""
         return self.translator_settings.get_translator_path()
 
     def add_extra_param(self, param_name, param_value):
@@ -69,6 +70,7 @@ class Translator(object):
         :returns: False if it's not possible to run the translation, True otherwise.
         """
 
+        # TODO remove this requirement?
         current_engine = sgtk.platform.current_engine()
 
         if (
@@ -110,36 +112,37 @@ class Translator(object):
             # the temporary output path for the translation
             temp_path = os.path.join(temp_dir, os.path.basename(self.output_path))
 
-            # build the command line which will be used to do the translation
-            cmd = [self.translator_path]
+            # # build the command line which will be used to do the translation
+            # cmd = [self.translator_path]
 
-            # get the license settings
-            cmd.append("-productKey")
-            cmd.append(self.translator_settings.license_settings.get("product_key", ""))
-            cmd.append("-productVersion")
-            cmd.append(
-                self.translator_settings.license_settings.get("product_version", "")
-            )
-            cmd.append("-productLicenseType")
-            cmd.append(
-                self.translator_settings.license_settings.get(
-                    "product_license_type", ""
-                )
-            )
-            cmd.append("-productLicensePath")
-            cmd.append(
-                self.translator_settings.license_settings.get(
-                    "product_license_path", ""
-                )
-            )
+            # # get the license settings
+            # cmd.append("-productKey")
+            # cmd.append(self.translator_settings.license_settings.get("product_key", ""))
+            # cmd.append("-productVersion")
+            # cmd.append(
+            #     self.translator_settings.license_settings.get("product_version", "")
+            # )
+            # cmd.append("-productLicenseType")
+            # cmd.append(
+            #     self.translator_settings.license_settings.get(
+            #         "product_license_type", ""
+            #     )
+            # )
+            # cmd.append("-productLicensePath")
+            # cmd.append(
+            #     self.translator_settings.license_settings.get(
+            #         "product_license_path", ""
+            #     )
+            # )
 
-            cmd.append("-i")
-            cmd.append(self.source_path)
-            cmd.append("-o")
-            cmd.append(temp_path)
+            # cmd.append("-i")
+            # cmd.append(self.source_path)
+            # cmd.append("-o")
+            # cmd.append(temp_path)
 
-            if self.translator_settings.extra_params:
-                cmd.extend(self.translator_settings.extra_params)
+            # if self.translator_settings.extra_params:
+            #     cmd.extend(self.translator_settings.extra_params)
+            cmd = self.translator_settings.get_translator_command(self.source_path, temp_path)
 
             # run the translation. note that command arguments are not quoted using shlex.quote
             # because the Alias translators do not support quoted arguments and can handle
@@ -149,6 +152,8 @@ class Translator(object):
 
             # copy the translated file from the temp location to the desired destination
             # before exiting this scope, else the temp directory and file will be deleted
+            if not os.path.exists(temp_path):
+                raise FileNotFoundError("Translation file not found: {}".format(temp_path))
             shutil.copyfile(temp_path, self.output_path)
 
     def _get_translation_type_from_output_path(self):
@@ -159,4 +164,11 @@ class Translator(object):
         """
 
         _, ext = os.path.splitext(self.output_path)
+        return ext[1:].lower()
+
+    def __get_file_extension(self, path):
+        """
+        """
+
+        _, ext = os.path.splitext(path)
         return ext[1:].lower()

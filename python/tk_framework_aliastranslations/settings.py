@@ -13,6 +13,25 @@ import sgtk
 logger = sgtk.platform.get_logger(__name__)
 
 
+"""
+EdfToAl - Convert Edf file to Alias Wire file
+Usage:
+    EdfToAl  -i <Edf file>  -o <Wire file>
+    -i            Input Edf filename (must be specified)
+    -o            Output Wire filename (if not specified, stdout is used)
+    -g <on/off>   Import ICEM molecules as Alias Groups (on is default)
+        where 0 off
+            1 on
+    -l <on/off>   Log results to file (off is default)
+        where 0 off
+            1 on
+    -r <path>   Redirect logfile results to a new path
+    -t          Append a .txt extension to the logfile
+    -h            Display this help information, then exit
+"""
+
+
+
 class TranslatorSettings(object):
     """Class object to store all the settings needed by the translation process."""
 
@@ -40,6 +59,20 @@ class TranslatorSettings(object):
             "default": "AliasToStep.exe",
         },
     }
+    TRANSLATORS = {
+        "wire": _EXEC_NAME_LIST,
+        "edf": {
+            "wire": {
+                "default": "AlToEdf.exe",
+                "extra_params": [
+                    "-g", "1",  # Import ICEM molecules as Alias Groups (on is default)
+                    "-l", "1",  # Log results to file (off is default)
+                    # "-r", "C:\\Users\\qa\\Desktop\\edf",  # Redirect logfile results to a new path
+                    "-t",  # Append a .txt extension to the logfile
+                ]
+            }
+        }
+    }
 
     # list of extra parameters we need to use in order to run translation correctly according to the type of file
     # we want to have
@@ -65,7 +98,7 @@ class TranslatorSettings(object):
         ]
     }
 
-    def __init__(self, translation_type=None):
+    def __init__(self, translation_type=None, input_type=None, output_type=None):
         """
         Class constructor.
 
@@ -75,11 +108,19 @@ class TranslatorSettings(object):
         """
 
         self.translation_type = translation_type
-        exec_options = (
-            self._EXEC_NAME_LIST.get(self.translation_type)
-            if self.translation_type
-            else {}
-        )
+        self.input_type = input_type
+        self.output_type = output_type
+
+        if input_type and output_type:
+            exec_options = self.TRANSLATORS.get(input_type, {}).get(output_type, {})
+        else:
+            # Old method
+            exec_options = (
+                self._EXEC_NAME_LIST.get(self.translation_type)
+                if self.translation_type
+                else {}
+            )
+
         self._exec_name = None
         for option_name, option_value in exec_options.items():
             if option_name == "default":
@@ -91,12 +132,52 @@ class TranslatorSettings(object):
             self._exec_name = exec_options.get("default")
 
         self._exec_path = None
+
+        # TODO put these in the TRANSLATORS dictionary
         self._extra_params = (
             self._EXTRA_PARAMS_LIST.get(self.translation_type, [])
             if self.translation_type
             else []
         )
+        self._extra_params.extend(self.TRANSLATORS.get(self.input_type, {}).get(self.output_type, {}).get("extra_params", []))
+
         self.license_settings = self.__get_license_settings()
+
+    # -------------------------------------------------------------------------------------------------------
+    # Static methods
+    # -------------------------------------------------------------------------------------------------------
+
+    @staticmethod
+    def __get_license_settings():
+        """
+        Get all the license settings needed by the translator executable in order to be executed
+
+        :return: A list containing all the license information
+        """
+
+        # current_engine = sgtk.platform.current_engine()
+
+        # if current_engine.name != "tk-alias":
+        #     return {}
+
+        # else:
+
+        try:
+            import alias_api
+        except ModuleNotFoundError:
+            return {}
+
+        alias_info = alias_api.get_product_information()
+        return {
+            "product_key": alias_info.get("product_key"),
+            "product_version": alias_info.get("product_version"),
+            "product_license_type": alias_info.get("product_license_type"),
+            "product_license_path": alias_info.get("product_license_path"),
+        }
+
+    # -------------------------------------------------------------------------------------------------------
+    # Properties
+    # -------------------------------------------------------------------------------------------------------
 
     @property
     def exec_name(self):
@@ -108,6 +189,10 @@ class TranslatorSettings(object):
     def extra_params(self):
         """Get the list of extra parameters which will be used by the translation process."""
         return self._extra_params
+
+    # -------------------------------------------------------------------------------------------------------
+    # Public methods
+    # -------------------------------------------------------------------------------------------------------
 
     def get_translator_path(self):
         """
@@ -162,26 +247,40 @@ class TranslatorSettings(object):
 
         return exec_path
 
-    @staticmethod
-    def __get_license_settings():
-        """
-        Get all the license settings needed by the translator executable in order to be executed
+    def get_translator_command(self, input_path, output_path):
+        """Return the command to run the ATF translator."""
 
-        :return: A list containing all the license information
-        """
+        # build the command line which will be used to do the translation
+        translator_path = self.get_translator_path()
 
-        current_engine = sgtk.platform.current_engine()
+        cmd = [translator_path]
 
-        if current_engine.name != "tk-alias":
-            return {}
+        # get the license settings
+        cmd.append("-productKey")
+        cmd.append(self.license_settings.get("product_key", ""))
+        cmd.append("-productVersion")
+        cmd.append(
+            self.license_settings.get("product_version", "")
+        )
+        cmd.append("-productLicenseType")
+        cmd.append(
+            self.license_settings.get(
+                "product_license_type", ""
+            )
+        )
+        cmd.append("-productLicensePath")
+        cmd.append(
+            self.license_settings.get(
+                "product_license_path", ""
+            )
+        )
 
-        else:
-            import alias_api
+        cmd.append("-i")
+        cmd.append(input_path)
+        cmd.append("-o")
+        cmd.append(output_path)
 
-            alias_info = alias_api.get_product_information()
-            return {
-                "product_key": alias_info.get("product_key"),
-                "product_version": alias_info.get("product_version"),
-                "product_license_type": alias_info.get("product_license_type"),
-                "product_license_path": alias_info.get("product_license_path"),
-            }
+        if self.extra_params:
+            cmd.extend(self.extra_params) 
+        
+        return cmd
