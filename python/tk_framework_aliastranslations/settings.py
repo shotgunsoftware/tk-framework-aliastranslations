@@ -167,7 +167,7 @@ class TranslatorSettings(object):
         """
         Get all the license settings needed by the translator executable in order to be executed
 
-        :return: A list containing all the license information
+        :return: A dictionary containing all the license information
         """
 
         current_engine = sgtk.platform.current_engine()
@@ -175,13 +175,13 @@ class TranslatorSettings(object):
         if current_engine.name != "tk-alias":
             return {}
 
-        else:
-            import alias_api
+        alias_info = current_engine.alias_py.get_product_information()
+        if not alias_info:
+            return {}
 
-            alias_info = alias_api.get_product_information()
-            return {
-                "product_key": alias_info.get("product_key"),
-                "product_version": alias_info.get("product_version"),
-                "product_license_type": alias_info.get("product_license_type"),
-                "product_license_path": alias_info.get("product_license_path"),
-            }
+        return {
+            "product_key": alias_info.get("product_key"),
+            "product_version": alias_info.get("product_version"),
+            "product_license_type": alias_info.get("product_license_type"),
+            "product_license_path": alias_info.get("product_license_path"),
+        }
