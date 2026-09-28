@@ -23,31 +23,16 @@ _LICENSE_SETTING_KEYS = (
 )
 
 
-def _version_component(value):
+def _compare_alias_versions(version1, version2):
     try:
-        return int(value)
-    except (TypeError, ValueError):
-        return 0
-
-
-def _version_cmp(version1, version2):
-    """
-    Compare dotted Alias version strings (same semantics as tk-framework-alias utils).
-
-    :returns: 1 if version1 > version2, -1 if version1 < version2, else 0.
-    :rtype: int
-    """
-    arr1 = [_version_component(part) for part in str(version1).split(".")]
-    arr2 = [_version_component(part) for part in str(version2).split(".")]
-    length = max(len(arr1), len(arr2))
-    arr1.extend([0] * (length - len(arr1)))
-    arr2.extend([0] * (length - len(arr2)))
-    for left, right in zip(arr1, arr2):
-        if left > right:
-            return 1
-        if right > left:
-            return -1
-    return 0
+        engine = sgtk.platform.current_engine()
+    except Exception:
+        engine = None
+    if engine and engine.name == "tk-alias":
+        return engine.compare_alias_versions(version1, version2)
+    raise RuntimeError(
+        "Alias version comparison requires a running tk-alias engine."
+    )
 
 
 def normalize_license_settings(license_settings):
@@ -112,7 +97,10 @@ def uses_legacy_translator_license_cli(license_settings=None):
         return True
 
     return all(
-        _version_cmp(candidate, _NEW_TRANSLATOR_LICENSE_CLI_MIN_ALIAS_VERSION) < 0
+        _compare_alias_versions(
+            candidate, _NEW_TRANSLATOR_LICENSE_CLI_MIN_ALIAS_VERSION
+        )
+        < 0
         for candidate in candidates
     )
 
