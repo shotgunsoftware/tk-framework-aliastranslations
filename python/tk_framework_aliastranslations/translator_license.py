@@ -30,9 +30,7 @@ def _compare_alias_versions(version1, version2):
         engine = None
     if engine and engine.name == "tk-alias":
         return engine.compare_alias_versions(version1, version2)
-    raise RuntimeError(
-        "Alias version comparison requires a running tk-alias engine."
-    )
+    raise RuntimeError("Alias version comparison requires a running tk-alias engine.")
 
 
 def normalize_license_settings(license_settings):
@@ -118,7 +116,10 @@ def supplement_license_settings(license_settings):
     """
     settings = normalize_license_settings(license_settings)
 
-    if uses_legacy_translator_license_cli(settings) and not settings["product_license_type"]:
+    if (
+        uses_legacy_translator_license_cli(settings)
+        and not settings["product_license_type"]
+    ):
         settings["product_license_type"] = (
             os.environ.get("ALIAS_PRODUCT_LIC_TYPE")
             or os.environ.get("ALIAS_PRODUCT_LICENSE_TYPE")

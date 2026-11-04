@@ -113,9 +113,7 @@ class Translator(object):
 
             # build the command line which will be used to do the translation
             cmd = [self.translator_path]
-            append_license_arguments(
-                cmd, self.translator_settings.license_settings
-            )
+            append_license_arguments(cmd, self.translator_settings.license_settings)
 
             cmd.append("-i")
             cmd.append(self.source_path)
