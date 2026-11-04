@@ -10,6 +10,8 @@
 import os
 import sgtk
 
+from .translator_license import supplement_license_settings
+
 logger = sgtk.platform.get_logger(__name__)
 
 
@@ -179,9 +181,11 @@ class TranslatorSettings(object):
         if not alias_info:
             return {}
 
-        return {
-            "product_key": alias_info.get("product_key"),
-            "product_version": alias_info.get("product_version"),
-            "product_license_type": alias_info.get("product_license_type"),
-            "product_license_path": alias_info.get("product_license_path"),
-        }
+        return supplement_license_settings(
+            {
+                "product_key": alias_info.get("product_key"),
+                "product_version": alias_info.get("product_version"),
+                "product_license_type": alias_info.get("product_license_type"),
+                "product_license_path": alias_info.get("product_license_path"),
+            }
+        )
