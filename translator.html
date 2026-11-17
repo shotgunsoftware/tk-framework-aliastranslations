@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alias Translations &mdash; tk-framework-aliastranslations v0.3.1 documentation</title>
+  <title>Alias Translations &mdash; tk-framework-aliastranslations v0.3.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -97,7 +97,7 @@
                              text-decoration: underline; }
     </style>
 
-    <b>tk-framework-aliastranslations</b> v0.3.1.<br>
+    <b>tk-framework-aliastranslations</b> v0.3.2.<br>
     
         This documentation is part of the Flow Production Tracking.
     
@@ -147,15 +147,15 @@
 <section id="sample-code-translate-a-wire-file-to-a-catpart-file">
 <h3>Sample Code: Translate a wire file to a CATPart file<a class="headerlink" href="#sample-code-translate-a-wire-file-to-a-catpart-file" title="Permalink to this heading"></a></h3>
 <p>Here is a simple piece of code to convert an Alias wire file to a CATPart file:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source_path</span> <span class="o">=</span> <span class="s2">&quot;/path/to/file.wire&quot;</span>
-<span class="n">destination_path</span> <span class="o">=</span> <span class="s2">&quot;/path/to/file.CATPart&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source_path</span> <span class="o">=</span> <span class="s2">"/path/to/file.wire"</span>
+<span class="n">destination_path</span> <span class="o">=</span> <span class="s2">"/path/to/file.CATPart"</span>
 
 <span class="n">translator</span> <span class="o">=</span> <span class="n">Translator</span><span class="p">(</span><span class="n">source_path</span><span class="p">,</span> <span class="n">destination_path</span><span class="p">)</span>
 
 <span class="c1"># If needed, we can add some extra attributes to the conversion</span>
 <span class="c1"># Here, for example, we want to use a specific version of CATPart</span>
 <span class="c1"># To find the list of all the available arguments, please refer to the command line options</span>
-<span class="n">translator</span><span class="o">.</span><span class="n">add_extra_param</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
+<span class="n">translator</span><span class="o">.</span><span class="n">add_extra_param</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
 
 <span class="n">translator</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
 </pre></div>
