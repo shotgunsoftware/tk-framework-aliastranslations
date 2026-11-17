@@ -10,6 +10,8 @@
 import os
 import sgtk
 
+from .translator_license import supplement_license_settings
+
 logger = sgtk.platform.get_logger(__name__)
 
 
@@ -91,6 +93,7 @@ class TranslatorSettings(object):
             self._exec_name = exec_options.get("default")
 
         self._exec_path = None
+        self._discovered_alias_release = None
         self._extra_params = (
             self._EXTRA_PARAMS_LIST.get(self.translation_type, [])
             if self.translation_type
@@ -142,6 +145,8 @@ class TranslatorSettings(object):
                 bin_folder_path = os.path.dirname(s.path)
                 if os.path.exists(bin_folder_path):
                     root_path = bin_folder_path
+                    if s.version:
+                        self._discovered_alias_release = s.version
                     break
 
         if not root_path:
@@ -179,9 +184,11 @@ class TranslatorSettings(object):
         if not alias_info:
             return {}
 
-        return {
-            "product_key": alias_info.get("product_key"),
-            "product_version": alias_info.get("product_version"),
-            "product_license_type": alias_info.get("product_license_type"),
-            "product_license_path": alias_info.get("product_license_path"),
-        }
+        return supplement_license_settings(
+            {
+                "product_key": alias_info.get("product_key"),
+                "product_version": alias_info.get("product_version"),
+                "product_license_type": alias_info.get("product_license_type"),
+                "product_license_path": alias_info.get("product_license_path"),
+            }
+        )

@@ -16,6 +16,7 @@ import tempfile
 import sgtk
 
 from .settings import TranslatorSettings
+from .translator_license import append_license_arguments
 
 logger = sgtk.platform.get_logger(__name__)
 
@@ -112,26 +113,13 @@ class Translator(object):
 
             # build the command line which will be used to do the translation
             cmd = [self.translator_path]
-
-            # get the license settings
-            cmd.append("-productKey")
-            cmd.append(self.translator_settings.license_settings.get("product_key", ""))
-            cmd.append("-productVersion")
-            cmd.append(
-                self.translator_settings.license_settings.get("product_version", "")
-            )
-            cmd.append("-productLicenseType")
-            cmd.append(
-                self.translator_settings.license_settings.get(
-                    "product_license_type", ""
+            license_settings = self.translator_settings.license_settings
+            if self.translator_settings._discovered_alias_release:
+                license_settings = dict(
+                    license_settings,
+                    alias_release=self.translator_settings._discovered_alias_release,
                 )
-            )
-            cmd.append("-productLicensePath")
-            cmd.append(
-                self.translator_settings.license_settings.get(
-                    "product_license_path", ""
-                )
-            )
+            append_license_arguments(cmd, license_settings)
 
             cmd.append("-i")
             cmd.append(self.source_path)
