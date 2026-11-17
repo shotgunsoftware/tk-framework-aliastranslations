@@ -93,6 +93,7 @@ class TranslatorSettings(object):
             self._exec_name = exec_options.get("default")
 
         self._exec_path = None
+        self._discovered_alias_release = None
         self._extra_params = (
             self._EXTRA_PARAMS_LIST.get(self.translation_type, [])
             if self.translation_type
@@ -145,7 +146,7 @@ class TranslatorSettings(object):
                 if os.path.exists(bin_folder_path):
                     root_path = bin_folder_path
                     if s.version:
-                        self.license_settings["alias_release"] = s.version
+                        self._discovered_alias_release = s.version
                     break
 
         if not root_path:
