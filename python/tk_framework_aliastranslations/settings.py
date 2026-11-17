@@ -144,6 +144,8 @@ class TranslatorSettings(object):
                 bin_folder_path = os.path.dirname(s.path)
                 if os.path.exists(bin_folder_path):
                     root_path = bin_folder_path
+                    if s.version:
+                        self.license_settings["alias_release"] = s.version
                     break
 
         if not root_path:

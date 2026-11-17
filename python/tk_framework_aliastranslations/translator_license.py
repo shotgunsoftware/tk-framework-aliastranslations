@@ -11,6 +11,7 @@
 import os
 
 import sgtk
+from sgtk.util.version import is_version_older
 
 # Alias 2027.1+ translators use product key/version only (no license type/path flags).
 _NEW_TRANSLATOR_LICENSE_CLI_MIN_ALIAS_VERSION = "2027.1"
@@ -57,6 +58,9 @@ def _release_version_candidates(license_settings=None):
 
     ``engine.alias_version`` (e.g. ``2027.1`` from AboutBox) can differ from
     ``product_version`` (e.g. ``2027.0.0.F`` from ``AlProduct.full_version``).
+
+    When translation runs outside Alias, ``alias_release`` carries the release
+    discovered from the selected translator installation.
     """
     license_settings = license_settings or {}
     candidates = []
@@ -70,6 +74,10 @@ def _release_version_candidates(license_settings=None):
         alias_version = getattr(engine, "alias_version", None)
         if alias_version:
             candidates.append(str(alias_version).strip().split()[0])
+
+    alias_release = license_settings.get("alias_release")
+    if alias_release:
+        candidates.append(str(alias_release).strip().split()[0])
 
     product_version = license_settings.get("product_version")
     if product_version:
@@ -88,11 +96,27 @@ def uses_legacy_translator_license_cli(license_settings=None):
 
     Legacy CLI is used only when every known release is older than Alias 2027.1.
     If ``engine.alias_version`` is 2027.1 but ``product_version`` is still 2027.0.x,
-    the modern CLI is selected.
+    the modern CLI is selected. Outside Alias, legacy mode follows ``alias_release``
+    from the discovered translator installation.
     """
+    license_settings = license_settings or {}
     candidates = _release_version_candidates(license_settings)
     if not candidates:
         return True
+
+    try:
+        engine = sgtk.platform.current_engine()
+    except Exception:
+        engine = None
+
+    if not (engine and engine.name == "tk-alias"):
+        alias_release = license_settings.get("alias_release")
+        if not alias_release:
+            return True
+        return is_version_older(
+            str(alias_release).strip().split()[0],
+            _NEW_TRANSLATOR_LICENSE_CLI_MIN_ALIAS_VERSION,
+        )
 
     return all(
         _compare_alias_versions(
